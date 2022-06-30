@@ -51,25 +51,23 @@ class DQNAgent():
     def step(self, state, action, reward, next_state, done):
         # Save experience in replay memory
         self.memory.add(state, action, reward, next_state, done)
-        
+
         # Learn every UPDATE_EVERY time steps.
         self.t_step = (self.t_step + 1) % self.update_every
 
-        if self.t_step == 0:
-            # If enough samples are available in memory, get random subset and learn
-            if len(self.memory) > self.replay_after:
-                experiences = self.memory.sample()
-                self.learn(experiences)
+        if self.t_step == 0 and len(self.memory) > self.replay_after:
+            experiences = self.memory.sample()
+            self.learn(experiences)
                 
     def act(self, state, eps=0.):
         """Returns actions for given state as per current policy."""
-        
+
         state = torch.from_numpy(state).unsqueeze(0).to(self.device)
         self.policy_net.eval()
         with torch.no_grad():
             action_values = self.policy_net(state)
         self.policy_net.train()
-        
+
         # Epsilon-greedy action selection
         if random.random() > eps:
             return np.argmax(action_values.cpu().data.numpy())
