@@ -126,7 +126,7 @@ class FrozenLakeEnv(discrete.DiscreteEnv):
         desc = [[c.decode('utf-8') for c in line] for line in desc]
         desc[row][col] = utils.colorize(desc[row][col], "red", highlight=True)
         if self.lastaction is not None:
-            outfile.write("  ({})\n".format(["Left","Down","Right","Up"][self.lastaction]))
+            outfile.write(f'  ({["Left","Down","Right","Up"][self.lastaction]})\n')
         else:
             outfile.write("\n")
         outfile.write("\n".join(''.join(line) for line in desc)+"\n")
